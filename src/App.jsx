@@ -86,14 +86,86 @@
 
 // export default App;
 
-import { useEffect, useState } from "react";
-import "./App.css";
-import { useFetch, usePostTitle } from "./useFetch";
+// import { useEffect, useState } from "react";
+// import "./App.css";
+// import { useFetch, usePostTitle } from "./useFetch";
 
+// function App() {
+// 	const { finalData } = useFetch(
+// 		"https://jsonplaceholder.typicode.com/posts/1"
+// 	);
+// 	return <div>{JSON.stringify(finalData)}</div>;
+// }
+// export default App;
+
+// import { useEffect, useState } from "react";
+// import "./App.css";
+// import { useFetch } from "./useFetch";
+
+// function App() {
+// 	const [currentPost, setCurrentPost] = useState(1);
+
+// 	const { finalData, loading } = useFetch(
+// 		"https://jsonplaceholder.typicode.com/posts/" + currentPost
+// 	);
+// 	if (loading) {
+// 		return <div>Loading...</div>;
+// 	}
+// 	return (
+// // 		<div>
+// 			<button onClick={() => setCurrentPost(1)}>1</button>
+// 			<button onClick={() => setCurrentPost(2)}>2</button>
+// 			<button onClick={() => setCurrentPost(3)}>3</button>
+// 			{JSON.stringify(finalData)}
+// 		</div>
+// );
+// }
+// // export default App;
+// import { useEffect, useState } from "react";
+// import { usePrev } from "./user-prev";
+// function App() {
+// 	const [state, setState] = useState(0);
+// 	const prev = usePrev(state);
+// 	return (
+// 		<>
+// 			<p>{state}</p>
+// 			<button
+// 				onClick={() => {
+// 					setState((curr) => curr + 1);
+// 				}}
+// 			>
+// 				click
+// 			</button>
+// 			<p>the prev value was {prev}</p>
+// 		</>
+// 	);
+// }
+// export default App;
+// export default App;
+import { useEffect, useState } from "react";
+import { usePrev } from "./user-prev";
+function useCounter() {
+	const [count, setCount] = useState(0);
+	function increaseCount() {
+		setCount((c) => c + 1);
+	}
+	function decreaseCount() {
+		setCount((c) => c - 1);
+	}
+	return {
+		count,
+		increaseCount,
+		decreaseCount,
+	};
+}
 function App() {
-	const { finalData } = useFetch(
-		"https://jsonplaceholder.typicode.com/posts/1"
+	const { count, increaseCount, decreaseCount } = useCounter();
+	return (
+		<>
+			<button onClick={increaseCount}>Increase</button>
+			<button onClick={decreaseCount}>decrease</button>
+			<p>{count}</p>
+		</>
 	);
-	return <div>{JSON.stringify(finalData)}</div>;
 }
 export default App;

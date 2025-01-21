@@ -15,13 +15,15 @@ export function usePostTitle() {
 }
 export function useFetch(url) {
 	const [finalData, setFinalData] = useState({});
+	const [loading, setLoading] = useState({});
 	async function getDetails() {
 		const response = await fetch(url);
 		const json = await response.json();
 		setFinalData(json);
+		setLoading(false);
 	}
 	useEffect(() => {
 		getDetails();
-	}, []);
-	return { finalData };
+	}, [url]);
+	return { finalData, loading };
 }
