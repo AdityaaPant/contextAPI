@@ -141,31 +141,84 @@
 // 	);
 // }
 // export default App;
+// // export default App;
+// import { useEffect, useState } from "react";
+// import { usePrev } from "./user-prev";
+// function useCounter() {
+// 	const [count, setCount] = useState(0);
+// 	function increaseCount() {
+// 		setCount((c) => c + 1);
+// 	}
+// 	function decreaseCount() {
+// 		setCount((c) => c - 1);
+// 	}
+// 	return {
+// 		count,
+// 		increaseCount,
+// 		decreaseCount,
+// 	};
+// }
+// function App() {
+// 	const { count, increaseCount, decreaseCount } = useCounter();
+// 	return (
+// 		<>
+// 			<button onClick={increaseCount}>Increase</button>
+// 			<button onClick={decreaseCount}>decrease</button>
+// 			<p>{count}</p>
+// 		</>
+// 	);
+// }
 // export default App;
-import { useEffect, useState } from "react";
-import { usePrev } from "./user-prev";
-function useCounter() {
+import React, { useState, useEffect, createContext, useContext } from "react";
+
+const CountContext = createContext();
+
+function CountContextProvider({ children }) {
 	const [count, setCount] = useState(0);
-	function increaseCount() {
-		setCount((c) => c + 1);
-	}
-	function decreaseCount() {
-		setCount((c) => c - 1);
-	}
-	return {
-		count,
-		increaseCount,
-		decreaseCount,
-	};
-}
-function App() {
-	const { count, increaseCount, decreaseCount } = useCounter();
+
 	return (
-		<>
-			<button onClick={increaseCount}>Increase</button>
-			<button onClick={decreaseCount}>decrease</button>
-			<p>{count}</p>
-		</>
+		<CountContext.Provider value={{ count, setCount }}>
+			{" "}
+			{children}
+		</CountContext.Provider>
 	);
 }
+function Parent() {
+	return (
+		<CountContextProvider>
+			<Increase />
+			<Decrease />
+			<Value />
+		</CountContextProvider>
+	);
+}
+function Decrease() {
+	const { count, setCount } = useContext(CountContext);
+
+	return (
+		<div>
+			<button onClick={() => setCount(count - 1)}>Decrease</button>
+		</div>
+	);
+}
+function Increase() {
+	const { count, setCount } = useContext(CountContext);
+
+	return (
+		<div>
+			<button onClick={() => setCount(count + 1)}>Increase</button>
+		</div>
+	);
+}
+function Value() {
+	const { count } = useContext(CountContext);
+	return <p>{count}</p>;
+}
+const App = () => {
+	return (
+		<div>
+			<Parent />
+		</div>
+	);
+};
 export default App;
