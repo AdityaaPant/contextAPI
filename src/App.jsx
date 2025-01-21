@@ -168,51 +168,92 @@
 // 		</>
 // 	);
 // }
+// // export default App;
+// import React, { useState, useEffect, createContext, useContext } from "react";
+
+// const CountContext = createContext();
+
+// function CountContextProvider({ children }) {
+// 	const [count, setCount] = useState(0);
+
+// 	return (
+// 		<CountContext.Provider value={{ count, setCount }}>
+// 			{" "}
+// 			{children}
+// 		</CountContext.Provider>
+// 	);
+// }
+// function Parent() {
+// 	return (
+// 		<CountContextProvider>
+// 			<Increase />
+// 			<Decrease />
+// 			<Value />
+// 		</CountContextProvider>
+// 	);
+// }
+// function Decrease() {
+// 	const { count, setCount } = useContext(CountContext);
+
+// 	return (
+// 		<div>
+// 			<button onClick={() => setCount(count - 1)}>Decrease</button>
+// 		</div>
+// 	);
+// }
+// function Increase() {
+// 	const { count, setCount } = useContext(CountContext);
+
+// 	return (
+// 		<div>
+// 			<button onClick={() => setCount(count + 1)}>Increase</button>
+// 		</div>
+// 	);
+// }
+// function Value() {
+// 	const { count } = useContext(CountContext);
+// 	return <p>{count}</p>;
+// }
+// const App = () => {
+// 	return (
+// 		<div>
+// 			<Parent />
+// 		</div>
+// 	);
+// };
 // export default App;
-import React, { useState, useEffect, createContext, useContext } from "react";
 
-const CountContext = createContext();
+import { useState, useEffect, createContext } from "react";
+import { RecoilRoot, atom, useSetRecoilState, useRecoilValue } from "recoil";
 
-function CountContextProvider({ children }) {
-	const [count, setCount] = useState(0);
-
-	return (
-		<CountContext.Provider value={{ count, setCount }}>
-			{" "}
-			{children}
-		</CountContext.Provider>
-	);
-}
+const count = atom({
+	key: "countstate",
+	default: 0,
+});
 function Parent() {
 	return (
-		<CountContextProvider>
+		<RecoilRoot>
 			<Increase />
 			<Decrease />
 			<Value />
-		</CountContextProvider>
+		</RecoilRoot>
 	);
 }
 function Decrease() {
-	const { count, setCount } = useContext(CountContext);
-
+	const setCount = useSetRecoilState(count);
 	return (
-		<div>
-			<button onClick={() => setCount(count - 1)}>Decrease</button>
-		</div>
+		<button onClick={() => setCount((count) => count - 1)}>Decrease</button>
 	);
 }
 function Increase() {
-	const { count, setCount } = useContext(CountContext);
-
+	const setCount = useSetRecoilState(count);
 	return (
-		<div>
-			<button onClick={() => setCount(count + 1)}>Increase</button>
-		</div>
+		<button onClick={() => setCount((count) => count + 1)}>Increase</button>
 	);
 }
 function Value() {
-	const { count } = useContext(CountContext);
-	return <p>{count}</p>;
+	const countValue = useRecoilValue(count);
+	return <p>Count :{countValue}</p>;
 }
 const App = () => {
 	return (
