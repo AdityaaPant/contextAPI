@@ -223,43 +223,90 @@
 // };
 // export default App;
 
-import { useState, useEffect, createContext } from "react";
-import { RecoilRoot, atom, useSetRecoilState, useRecoilValue } from "recoil";
+// import { useState, useEffect, createContext } from "react";
+// import { RecoilRoot, atom, useSetRecoilState, useRecoilValue } from "recoil";
 
-const count = atom({
-	key: "countstate",
-	default: 0,
-});
-function Parent() {
+// const count = atom({
+// 	key: "countstate",
+// 	default: 0,
+// });
+// function Parent() {
+// 	return (
+// 		<RecoilRoot>
+// 			<Increase />
+// 			<Decrease />
+// 			<Value />
+// 		</RecoilRoot>
+// 	);
+// }
+// function Decrease() {
+// 	const setCount = useSetRecoilState(count);
+// 	return (
+// 		<button onClick={() => setCount((count) => count - 1)}>Decrease</button>
+// 	);
+// }
+// function Increase() {
+// 	const setCount = useSetRecoilState(count);
+// 	return (
+// 		<button onClick={() => setCount((count) => count + 1)}>Increase</button>
+// 	);
+// }
+// function Value() {
+// 	const countValue = useRecoilValue(count);
+// 	return <p>Count :{countValue}</p>;
+// }
+// const App = () => {
+// 	return (
+// 		<div>
+// 			<Parent />
+// 		</div>
+// 	);
+// };
+// export default App;
+
+import { useState, memo } from "react";
+import {
+	RecoilRoot,
+	atom,
+	selector,
+	useRecoilValue,
+	useSetRecoilState,
+} from "recoil";
+import { counterAtom } from "./counter";
+function App() {
 	return (
 		<RecoilRoot>
-			<Increase />
-			<Decrease />
-			<Value />
+			<Counter />
 		</RecoilRoot>
 	);
 }
-function Decrease() {
-	const setCount = useSetRecoilState(count);
-	return (
-		<button onClick={() => setCount((count) => count - 1)}>Decrease</button>
-	);
-}
-function Increase() {
-	const setCount = useSetRecoilState(count);
-	return (
-		<button onClick={() => setCount((count) => count + 1)}>Increase</button>
-	);
-}
-function Value() {
-	const countValue = useRecoilValue(count);
-	return <p>Count :{countValue}</p>;
-}
-const App = () => {
+function Counter() {
 	return (
 		<div>
-			<Parent />
+			<CurrentCount />
+			<Buttons />
 		</div>
 	);
-};
+}
+
+function CurrentCount() {
+	const count = useRecoilValue(counterAtom);
+	return <div>{count}</div>;
+}
+const Buttons = memo(function () {
+	const setCount = useSetRecoilState(counterAtom);
+
+	function increase() {
+		setCount((c) => c + 1);
+	}
+	function decrease() {
+		setCount((c) => c - 1);
+	}
+	return (
+		<div>
+			<button onClick={increase}>increase</button>
+			<button onClick={decrease}>decrease</button>
+		</div>
+	);
+});
 export default App;
