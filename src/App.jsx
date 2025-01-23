@@ -264,49 +264,94 @@
 // };
 // export default App;
 
-import { useState, memo } from "react";
-import {
-	RecoilRoot,
-	atom,
-	selector,
-	useRecoilValue,
-	useSetRecoilState,
-} from "recoil";
-import { counterAtom } from "./counter";
+// import { useState, memo } from "react";
+// import {
+// 	RecoilRoot,
+// 	atom,
+// 	selector,
+// 	useRecoilValue,
+// 	useSetRecoilState,
+// } from "recoil";
+// import { counterAtom } from "./counter";
+// function App() {
+// 	return (
+// 		<RecoilRoot>
+// 			<Counter />
+// 		</RecoilRoot>
+// 	);
+// }
+// function Counter() {
+// 	return (
+// 		<div>
+// 			<CurrentCount />
+// 			<Buttons />
+// 		</div>
+// 	);
+// }
+
+// function CurrentCount() {
+// 	const count = useRecoilValue(counterAtom);
+// 	return <div>{count}</div>;
+// }
+// const Buttons = memo(function () {
+// 	const setCount = useSetRecoilState(counterAtom);
+
+// 	function increase() {
+// 		setCount((c) => c + 1);
+// 	}
+// 	function decrease() {
+// 		setCount((c) => c - 1);
+// 	}
+// 	return (
+// 		<div>
+// 			<button onClick={increase}>increase</button>
+// 			<button onClick={decrease}>decrease</button>
+// 		</div>
+// 	);
+// });
+// export default App;
+
+import { RecoilRoot, useRecoilState, useRecoilValue } from "recoil";
+import { networkAtom } from "./atoms";
+import { jobsAtom } from "./atoms";
+import { notificationsAtom } from "./atoms";
+import { messageAtom } from "./atoms";
+import { totalNotificationSelector } from "./atoms";
 function App() {
 	return (
 		<RecoilRoot>
-			<Counter />
+			<MainApp />
 		</RecoilRoot>
 	);
 }
-function Counter() {
+function MainApp() {
+	const networkNotificationCount = useRecoilValue(networkAtom);
+	const jobsNotificationCount = useRecoilValue(jobsAtom);
+	const notificationCount = useRecoilValue(notificationsAtom);
+	const messageNotificationCount = useRecoilValue(messageAtom);
+
+	const totalNotificationCount = useRecoilValue(totalNotificationSelector);
+
 	return (
 		<div>
-			<CurrentCount />
-			<Buttons />
+			<button>Home</button>
+			<button>
+				My Network (
+				{networkNotificationCount >= 100 ? "99+" : networkNotificationCount})
+			</button>
+			<button>
+				Jobs ({jobsNotificationCount >= 100 ? "99+" : jobsNotificationCount})
+			</button>
+			<button>
+				Notifications ({notificationCount >= 100 ? "99+" : notificationCount})
+			</button>
+			<button>
+				notifcat (
+				{messageNotificationCount >= 100 ? "99+" : messageNotificationCount})
+			</button>
+
+			<button>({totalNotificationCount}) hi</button>
 		</div>
 	);
 }
-
-function CurrentCount() {
-	const count = useRecoilValue(counterAtom);
-	return <div>{count}</div>;
-}
-const Buttons = memo(function () {
-	const setCount = useSetRecoilState(counterAtom);
-
-	function increase() {
-		setCount((c) => c + 1);
-	}
-	function decrease() {
-		setCount((c) => c - 1);
-	}
-	return (
-		<div>
-			<button onClick={increase}>increase</button>
-			<button onClick={decrease}>decrease</button>
-		</div>
-	);
-});
 export default App;
